@@ -1,5 +1,7 @@
 import 'package:calculo_combustivel/ui/contato.dart';
 import 'package:calculo_combustivel/ui/functions.dart';
+import 'package:calculo_combustivel/widgets/barra_titulo.dart';
+import 'package:calculo_combustivel/widgets/botao.dart';
 import 'package:calculo_combustivel/widgets/campo_texto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,8 +17,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   var func = Functions();
+
   // declarar os campos que vao controlar os valores
-  final etanolController   = TextEditingController();
+  final etanolController = TextEditingController();
   final gasolinaController = TextEditingController();
   var resultado = "";
 
@@ -24,34 +27,23 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // opção de criar a barra de titulo e etc
     return Scaffold(
-      appBar: AppBar( // nao colocar botao de açao dentro do appBar
-        backgroundColor: Colors.teal,
-        title: Text("Etanol x Gasolina"),
-        actions: [
-          IconButton(icon: Icon(Icons.share),
-          onPressed: _compartilhar,
-          ),
-        ],
-      ),
-
-      // botao do carrinho
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.teal[500],
-        child: Icon(Icons.mail_outline_rounded, color: Colors.white),
-        onPressed: _abrirTelaContato,
-      ),
-
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      appBar: BarraTitulo.criar("Etanol x Gasolina", iconeBotao: Icons.share, eventoClique: _compartilhar),
+      floatingActionButton: Botao.botaoFlutuante(Icons.mail_outline, _abrirTelaContato),
+      drawer: Drawer(),
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-         CampoTexto.criar("Etanol", "R\$ ", etanolController, TextInputType.number),
-          CampoTexto.criar("Etanol", "R\$ ", gasolinaController, TextInputType.number),
+          CampoTexto.criar("Etanol", "R\$ ", etanolController, TextInputType.number),
+          CampoTexto.criar("Gasolina", "R\$ ", gasolinaController, TextInputType.number),
 
-          // botao("Calcular", calcular),
-          botao("Calcular", calcular),
-          // botao("HI", textoHI),
-          botao("Hi", textoHi),
-
+          Column(
+              children: [
+                // botao("Calcular", calcular),
+                Botao.criar("Calcular", calcular, icone: Icons.calculate, tamanhoBotao: 150),
+                // botao("HI", textoHI),
+                Botao.criar("Hi", textoHi, tamanhoBotao: 150),
+              ],
+          ),
           Text("Resultado: " + resultado)
         ],
       ),
@@ -65,19 +57,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget botao(String texto, Function clique) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        RaisedButton(
-          child: Text(texto, style: TextStyle(color: Colors.white, fontSize: 25),),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          color: Colors.teal,
-          onPressed: clique,
-        ),
-      ],
-    );
-  }
 
   void calcular() {
     if (etanolController.text.isEmpty) {
@@ -89,7 +68,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    double valorEtanol   = double.parse(etanolController.text);
+    double valorEtanol = double.parse(etanolController.text);
     double valorGasolina = double.parse(gasolinaController.text);
 
     if (valorEtanol <= (valorGasolina * 0.7)) {
@@ -98,19 +77,20 @@ class _HomePageState extends State<HomePage> {
     else {
       resultado = "Vai de gasolina";
     }
-    setState(() { });
+    setState(() {});
 
     func.mostrarMensagem(context, "Calculo concluido", resultado);
   }
 
   void _compartilhar() {
-    Share.share("Etanol: " + etanolController.text + ", Gasolina: " + gasolinaController.text);
+    Share.share("Etanol: " + etanolController.text + ", Gasolina: " +
+        gasolinaController.text);
   }
 
   void _abrirTelaContato() {
     Navigator.push(context,
         MaterialPageRoute(
             builder: (context) => Contato()
-    ));
+        ));
   }
 }
