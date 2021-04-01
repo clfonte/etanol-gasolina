@@ -1,5 +1,6 @@
 import 'package:calculo_combustivel/ui/contato.dart';
 import 'package:calculo_combustivel/ui/functions.dart';
+import 'package:calculo_combustivel/widgets/aba_drawer.dart';
 import 'package:calculo_combustivel/widgets/barra_titulo.dart';
 import 'package:calculo_combustivel/widgets/botao.dart';
 import 'package:calculo_combustivel/widgets/campo_texto.dart';
@@ -25,11 +26,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Map> listaItens = [
+      {"nome" : "Calcular", "icone" : Icons.calculate, "clique" : calcular},
+      {"nome" : "Contato", "icone" : null, "clique" : _abrirTelaContato},
+      {"nome" : "Enhai", "icone" : Icons.attribution_rounded, "clique" : textoHi},
+      {"nome" : "Compartilhar", "icone" : Icons.share, "clique" : _compartilhar,}
+    ];
     // opção de criar a barra de titulo e etc
     return Scaffold(
       appBar: BarraTitulo.criar("Etanol x Gasolina", iconeBotao: Icons.share, eventoClique: _compartilhar),
       floatingActionButton: Botao.botaoFlutuante(Icons.mail_outline, _abrirTelaContato),
-      drawer: Drawer(),
+      drawer: AbaDrawer.criarDrawer(context, "Etanol x Gasolina", listaItens, Colors.teal, Colors.white, iconeTitulo: Icons.directions_car_rounded),
       body: ListView(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[

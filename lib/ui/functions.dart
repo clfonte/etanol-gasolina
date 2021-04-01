@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Functions {
-  static Widget _criarIconeEspacado(IconData icone) {
+  static Widget _criarIconeEspacado(IconData icone, Color cor, double tamanho) {
     return Padding(padding: EdgeInsets.all(4),
-     child: Icon(icone),
+     child: Icon(icone, color: cor, size: tamanho),
     );
   }
   
-  static Widget criarIcone(IconData icone) {
-    return icone != null ? _criarIconeEspacado(icone) : Container();
+  static Widget criarIcone(IconData icone, {Color cor, double tamanho}) {
+    return icone != null ? _criarIconeEspacado(icone, cor, tamanho) : Container();
   }
   
   // tela que vai mostrar
